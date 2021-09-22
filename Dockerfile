@@ -11,4 +11,7 @@ FROM golang:1.15-alpine
 
 COPY --from=builder /tmp/go-opera/build /usr/local/bin
 
-ENTRYPOINT ['opera']
+ADD https://opera.fantom.network/mainnet.g /opt/genesis/
+ADD https://opera.fantom.network/testnet.g /opt/genesis/
+
+ENTRYPOINT ["opera"]
