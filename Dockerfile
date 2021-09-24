@@ -9,6 +9,8 @@ RUN git clone --depth 1 --branch release/1.0.2-rc.5 https://github.com/Fantom-fo
 
 FROM golang:1.15-alpine
 
+WORKDIR /root/.opera
+
 COPY --from=builder /tmp/go-opera/build /usr/local/bin
 
 ADD https://opera.fantom.network/mainnet.g /opt/genesis/
