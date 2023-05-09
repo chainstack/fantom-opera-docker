@@ -17,4 +17,3 @@ ADD https://opera.fantom.network/mainnet.g /opt/genesis/
 ADD https://opera.fantom.network/testnet.g /opt/genesis/
 
 ENTRYPOINT ["opera"]
-
