@@ -7,7 +7,7 @@ RUN git clone --depth 1 --branch release/1.1.2-rc.6 https://github.com/Fantom-fo
     cd go-opera && \
     make
 
-FROM golang:1.15-alpine
+FROM golang:1.17-alpine
 
 WORKDIR /root/.opera
 
