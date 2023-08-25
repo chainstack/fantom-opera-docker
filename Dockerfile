@@ -1,19 +1,20 @@
-FROM golang:1.15-alpine as builder
-
+FROM golang:1.17-alpine as builder
 WORKDIR /tmp
 
 RUN apk add --no-cache make gcc musl-dev linux-headers git
-RUN git clone --depth 1 --branch release/1.1.1-rc.2 https://github.com/Fantom-foundation/go-opera.git && \
+RUN go clean -modcache
+RUN git clone --depth 1 --branch release/1.1.3-rc.3 https://github.com/Fantom-foundation/go-opera.git && \
     cd go-opera && \
     make
 
-FROM golang:1.15-alpine
+FROM golang:1.17-alpine
 
 WORKDIR /root/.opera
 
 COPY --from=builder /tmp/go-opera/build /usr/local/bin
 
-ADD https://opera.fantom.network/mainnet.g /opt/genesis/
-ADD https://opera.fantom.network/testnet.g /opt/genesis/
+RUN mkdir /opt/genesis
+RUN wget -O /opt/genesis/mainnet.g https://opera.fantom.network/mainnet.g
+RUN wget -O /opt/genesis/testnet.g https://opera.fantom.network/testnet.g
 
 ENTRYPOINT ["opera"]
