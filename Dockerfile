@@ -1,13 +1,13 @@
-FROM golang:1.15-alpine as builder
-
+FROM golang:1.17-alpine as builder
 WORKDIR /tmp
 
 RUN apk add --no-cache make gcc musl-dev linux-headers git
+RUN go clean -modcache
 RUN git clone --depth 1 --branch release/1.1.3-rc.3 https://github.com/Fantom-foundation/go-opera.git && \
     cd go-opera && \
     make
 
-FROM golang:1.15-alpine
+FROM golang:1.17-alpine
 
 WORKDIR /root/.opera
 
