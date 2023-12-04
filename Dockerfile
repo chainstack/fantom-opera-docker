@@ -3,7 +3,7 @@ WORKDIR /tmp
 
 RUN apk add --no-cache make gcc musl-dev linux-headers git
 RUN go clean -modcache
-RUN git clone --depth 1 --branch release/1.1.3-rc.4 https://github.com/Fantom-foundation/go-opera.git && \
+RUN git clone --depth 1 --branch release/1.1.3-rc.5 https://github.com/Fantom-foundation/go-opera.git && \
     cd go-opera && \
     make
 
