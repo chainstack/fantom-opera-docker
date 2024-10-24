@@ -17,7 +17,7 @@ WORKDIR /root/.opera
 COPY --from=builder /tmp/go-opera/build /usr/local/bin
 
 RUN mkdir /opt/genesis
-RUN wget -O /opt/genesis/mainnet.g https://opera.fantom.network/mainnet.g
-RUN wget -O /opt/genesis/testnet.g https://opera.fantom.network/testnet.g
+RUN wget -O /opt/genesis/mainnet.g https://storage.googleapis.com/fantom-opera-genesis/mainnet.g
+RUN wget -O /opt/genesis/testnet.g https://storage.googleapis.com/fantom-opera-genesis/testnet.g
 
 ENTRYPOINT ["opera"]
