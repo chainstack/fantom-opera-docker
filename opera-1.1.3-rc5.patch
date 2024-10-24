@@ -1,0 +1,43 @@
+diff --git forkSrcPrefix/gossip/handler.go forkDstPrefix/gossip/handler.go
+index 1d5a48a183afdf92b6b2fe47f37397818e82e292..fcb134bd35da545947f16219ce56d8c41596c934 100644
+--- forkSrcPrefix/gossip/handler.go
++++ forkDstPrefix/gossip/handler.go
+@@ -3,6 +3,7 @@ package gossip
+ import (
+ 	"errors"
+ 	"fmt"
++	"github.com/ethereum/go-ethereum/p2p/enode"
+ 	"math"
+ 	"math/rand"
+ 	"strings"
+@@ -773,6 +774,17 @@ func (h *handler) highestPeerProgress() PeerProgress {
+ 	return max
+ }
+ 
++// isUseless checks if the peer is banned from discovery and ban it if it should be
++func isUseless(node *enode.Node, name string) bool {
++	useless := discfilter.Banned(node.ID(), node.Record())
++	lowerName := strings.ToLower(name)
++	if !useless && !strings.Contains(lowerName, "opera") && !strings.Contains(lowerName, "sonic") {
++		useless = true
++		discfilter.Ban(node.ID())
++	}
++	return useless
++}
++
+ // handle is the callback invoked to manage the life cycle of a peer. When
+ // this function terminates, the peer is disconnected.
+ func (h *handler) handle(p *peer) error {
+@@ -783,11 +795,7 @@ func (h *handler) handle(p *peer) error {
+ 		p.Log().Error("Snapshot extension barrier failed", "err", err)
+ 		return err
+ 	}
+-	useless := discfilter.Banned(p.Node().ID(), p.Node().Record())
+-	if !useless && (!eligibleForSnap(p.Peer) || !strings.Contains(strings.ToLower(p.Name()), "opera")) {
+-		useless = true
+-		discfilter.Ban(p.ID())
+-	}
++	useless := isUseless(p.Node(), p.Name())
+ 	if !p.Peer.Info().Network.Trusted && useless {
+ 		if h.peers.UselessNum() >= h.maxPeers/10 {
+ 			// don't allow more than 10% of useless peers
